@@ -99,7 +99,7 @@ CPolynom::CPolynom()
 	TMonom mon_null;
 	mon_null.coef = 0;
 	mon_null.degree = -1; 
-	pHead->InsLast(mon_null);
+	pHead->InsFirst(mon_null);
 }
 
 CPolynom::CPolynom(string strPol, string strVar, unsigned int power)
@@ -107,7 +107,7 @@ CPolynom::CPolynom(string strPol, string strVar, unsigned int power)
 	TMonom mon_null;
 	mon_null.coef = 0;
 	mon_null.degree = -1;
-	pHead->InsLast(mon_null);
+	pHead->InsFirst(mon_null);
 
 	// перевод строки с переменными в массив переменных
 	ToArrVar(strVar);
@@ -191,4 +191,45 @@ CPolynom::CPolynom(string strPol, string strVar, unsigned int power)
 		pHead->InsLast(arrMonom[i]);
 	}
 
+}
+CPolynom CPolynom::operator+(const CPolynom & polynom)
+{
+	CPolynom polF = *this;
+	CPolynom polS(polynom);
+	CPolynom result;
+	result.arrMonom = new TMonom[polF.numMonom + polS.numMonom];
+	TMonom mon_null;
+	mon_null.coef = 0;
+	mon_null.degree = -1;
+	result.pHead->InsFirst(mon_null);
+	unsigned int k = 0, i = 1, j = 1;
+
+	while (i < polF.pHead->GetCount())
+		while (j < polS.pHead->GetCount())
+		{
+
+			if (polF.arrMonom[i].degree > polS.arrMonom[j].degree)
+			{
+				result.arrMonom[k] = polF.arrMonom[i];
+				i++;
+			}
+			else
+			{
+				result.arrMonom[k] = polS.arrMonom[j];
+				j++;
+			}
+			if (polF.arrMonom[i].degree == polS.arrMonom[j].degree)
+			{
+				result.arrMonom[k].degree = polF.arrMonom[i].degree;
+				result.arrMonom[k].coef = polF.arrMonom[i].coef + polS.arrMonom[j].coef;
+				i++;
+				j++;
+			}
+			k++;
+		}
+	for (size_t i = 0; i < result.numMonom; i++)
+	{
+		result.pHead->InsLast(arrMonom[i]);
+	}
+	return result;
 }
