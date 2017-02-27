@@ -2,16 +2,16 @@
 
 void main()
 {
-	string str;
+	string strPol;
+	string strVar;
 	static unsigned int pow;
 	char * ch;
 
-	cout << "Enter a power:/t";
+	cout << "Enter the names of variabels as a priority (through a space):/n/t";
+	cin >> strVar;
+	cout << "Enter power:/t";
 	cin >> pow;
 
-	cout << "Enter a polynom:/t";
-	cin >> str;
-
-	CPolynom polynom(str, pow);
-
+	cout << "Enter the polynom:/n/t";
+	cin >> strPol;
 }
