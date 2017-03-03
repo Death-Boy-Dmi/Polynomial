@@ -15,4 +15,5 @@ void main()
 	cout << "Enter the polynom:/n/t";
 	cin >> strPol;
 	CPolynom(strPol, strVar, power);
+
 }

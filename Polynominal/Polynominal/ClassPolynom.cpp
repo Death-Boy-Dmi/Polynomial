@@ -233,3 +233,11 @@ CPolynom CPolynom::operator+(const CPolynom & polynom)
 	}
 	return result;
 }
+
+CPolynom CPolynom::operator*(double const c)
+{
+	CPolynom result = *this;
+	for (int i = 0; i < numMonom; i++)
+		result.arrMonom[i].coef *= c;
+	return result;
+}
