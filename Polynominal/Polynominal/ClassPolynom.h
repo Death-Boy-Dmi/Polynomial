@@ -34,5 +34,5 @@ public:
 	CPolynom operator + (const CPolynom &polynom);
 	CPolynom operator * (double const c);
 	string ToString(const CPolynom polynom); 
-	double Calculate(const CPolynom polynom);
+	double Calculate();
 };

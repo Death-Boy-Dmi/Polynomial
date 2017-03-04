@@ -192,6 +192,7 @@ CPolynom::CPolynom(string strPol, string strVar, unsigned int power)
 	}
 
 }
+
 CPolynom CPolynom::operator+(const CPolynom & polynom)
 {
 	CPolynom polF = *this;
@@ -237,7 +238,35 @@ CPolynom CPolynom::operator+(const CPolynom & polynom)
 CPolynom CPolynom::operator*(double const c)
 {
 	CPolynom result = *this;
-	for (int i = 0; i < numMonom; i++)
+	for (size_t i = 0; i < numMonom; i++)
 		result.arrMonom[i].coef *= c;
+	return result;
+}
+
+string CPolynom::ToString()
+{
+	
+}
+
+double CPolynom::Calculate()
+{
+	double result = 0;
+	double * arrArg = new double(numVar);
+	for (size_t i = 0; i < numVar; i++)
+	{
+		cout << arrVar[i] << " = ";
+		cin >> arrArg[i];
+		cout << endl;
+	}
+	CPolynom temp = *this;
+	for (size_t i = 0; i < numMonom; i++)
+	{		
+		double tempMonom = 1;
+		for (size_t j = 0; j < numVar; j++)
+		{
+			tempMonom *= pow(arrArg[j], (int)temp.arrMonom[i].degree / pow(power, numVar - 1 - j));
+		}
+		result += temp.arrMonom[i].coef*tempMonom;
+	}
 	return result;
 }
