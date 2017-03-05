@@ -18,9 +18,6 @@
     <ClCompile Include="Main_tests.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
-    <ClCompile Include="TList_tests.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
     <ClCompile Include="ClassPolynom_tests.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>

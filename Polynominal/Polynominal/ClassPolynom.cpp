@@ -5,7 +5,7 @@
 void CPolynom::ToArrVar(string strVar)	
 {
 	string sV = strVar;
-	size_t numVar = 0;
+	numVar = 0;
 	char space = ' ';
 
 	while (sV[0] == space) 
@@ -20,16 +20,11 @@ void CPolynom::ToArrVar(string strVar)
 	{
 		sV.erase(sV.find("  "), 1);
 	}
-
+	sV += " ";
 	for (unsigned int i = 0; i < sV.size(); i++)
-	{
 		if (sV[i] == ' ')
-		{
 			numVar++;
-		}
-	}
-	numVar = numVar++;
-
+		
 	arrVar = new string [numVar]; // создание массива переменных
 	for (unsigned int i = 0; i < numVar; i++)
 	{
@@ -73,41 +68,36 @@ void CPolynom::ToArrStrMon(string strPol)
 	}
 
 	string sP = strPol;
-	size_t numMon = 0;
-	for (size_t i = 0; i < sP.size(); )
+	numMonom = 0;
+	for (size_t i = 0; i < sP.size(); i++)
 	{
 		if (sP[i] == '+' || sP[i] == '-')
 		{
-			numMon++;
+			numMonom++;
 		}
 	}
-	numMonom = numMon++;
+	numMonom++;
 	
 	arrStrMon = new string[numMonom];
-
+	sP += " ";
 	for (unsigned int i = 0; i < numVar; i++)
 	{
-		unsigned int pos = sP.find("+" || "-");
+		unsigned int pos = sP.find(" ");
 		string strTemp = sP;
-		arrStrMon[i] = strTemp.erase(pos, strTemp.size() - pos);
-		sP.erase(0, pos + 1);
+		strTemp = strTemp.erase(pos, strTemp.size() - pos);
+		arrStrMon[i] = strTemp;
+		sP = sP.erase(0, pos);
 	}
 }
 
 CPolynom::CPolynom()
 {
-	TMonom mon_null;
-	mon_null.coef = 0;
-	mon_null.degree = -1; 
-	pHead->InsFirst(mon_null);
+	CreateHead();
 }
 
 CPolynom::CPolynom(string strPol, string strVar, unsigned int power)
 {
-	TMonom mon_null;
-	mon_null.coef = 0;
-	mon_null.degree = -1;
-	pHead->InsFirst(mon_null);
+	CreateHead();
 
 	// перевод строки с переменными в массив переменных
 	ToArrVar(strVar);
@@ -117,11 +107,19 @@ CPolynom::CPolynom(string strPol, string strVar, unsigned int power)
 	string sP = strPol;
 
 	// заполнение коэффициентов
+	arrMonom = new TMonom[numMonom];
 	for (size_t i = 0; i < numMonom; i++)
 	{
-		size_t pos = arrStrMon[i].find(arrVar[0]);
-		string strTemp = arrStrMon[i];
-		arrMonom[i].coef = atof((strTemp.erase(pos, arrStrMon[i].size() - pos)).c_str());
+		for (size_t j = 0; j < numVar; j++)
+		{
+			size_t pos = arrStrMon[i].find(arrVar[j]);
+			string strTemp = arrStrMon[i];
+			strTemp = strTemp.erase(pos, arrStrMon[i].size() - pos);
+			if (strTemp.size() == NULL)
+				arrMonom[i].coef = 1;
+			else
+			arrMonom[i].coef = atof(strTemp.c_str());
+		}
 	}
 
 	// добавление ^0 & ^1 к переменным в мономах
@@ -163,7 +161,7 @@ CPolynom::CPolynom(string strPol, string strVar, unsigned int power)
 	{
 		string monomWithOutVar = arrStrMon[i];
 		monomWithOutVar = arrStrMon[i].erase(0, arrStrMon[i].find(arrVar[0]));
-		for (size_t j = 0; j < numVar; i++)
+		for (size_t j = 0; j < numVar; j++)
 		{
 			size_t posVar = monomWithOutVar.find(arrVar[j]);
 			size_t posPow = monomWithOutVar.find("^");
@@ -173,11 +171,22 @@ CPolynom::CPolynom(string strPol, string strVar, unsigned int power)
 		arrMonom[i].degree = 0;
 		for (size_t j = 0; j < numVar; i++)
 		{
-			string tmp = monomWithOutVar.erase(0, 1);
-			size_t pos = monomWithOutVar.find("^");
-			arrPow[j] = atoi((tmp.erase(pos, tmp.size() + 1 - pos).c_str));
-			monomWithOutVar.erase(0, pos);
-			arrMonom[i].degree += arrPow[j] * pow(power, numVar - 1 - j);
+			string tmp = monomWithOutVar.erase(0,1);
+			size_t pos;
+			if (pos = monomWithOutVar.find("^") == string::npos)
+			{
+				arrMonom[i].degree = atoi(tmp.c_str());
+				break;
+			}
+			else
+			{
+				tmp = tmp.erase(pos, tmp.size() + 1 - pos);
+				arrPow[j] = atoi(tmp.c_str());
+				monomWithOutVar.erase(0, pos);
+				arrMonom[i].degree += arrPow[j] * pow(power, numVar - 1 - j);
+				if (pos = monomWithOutVar.find("^") == string::npos)
+					break;
+			}
 		}
 	}
 
@@ -185,12 +194,23 @@ CPolynom::CPolynom(string strPol, string strVar, unsigned int power)
 		for (size_t j = numMonom - 1; j > i; j--)
 			if (arrMonom[j - 1].degree > arrMonom[j].degree)
 				swap(arrMonom[j - 1].degree, arrMonom[j].degree);
-
+	TLink *p = new TLink;
 	for (size_t i = 0; i < numMonom; i++)
 	{
-		pHead->InsLast(arrMonom[i]);
+		if (i != 0)
+			p = p->pNext;
+		p->monom = arrMonom[i];
 	}
+	p->pNext = pHead;
+	pHead->pNext = p;
+}
 
+CPolynom::~CPolynom()
+{
+	delete pHead;
+	delete[] arrStrMon;
+	delete arrMonom;
+	delete[] arrVar;
 }
 
 CPolynom CPolynom::operator+(const CPolynom & polynom)
@@ -202,11 +222,12 @@ CPolynom CPolynom::operator+(const CPolynom & polynom)
 	TMonom mon_null;
 	mon_null.coef = 0;
 	mon_null.degree = -1;
-	result.pHead->InsFirst(mon_null);
+	result.CreateHead();
 	unsigned int k = 0, i = 1, j = 1;
-
-	while (i < polF.pHead->GetCount())
-		while (j < polS.pHead->GetCount())
+	TLink *pF = polF.pHead;
+	TLink *pS = polS.pHead;
+	while (pF->pNext!=polF.pHead)
+		while (pS->pNext != polS.pHead)
 		{
 
 			if (polF.arrMonom[i].degree > polS.arrMonom[j].degree)
@@ -223,14 +244,20 @@ CPolynom CPolynom::operator+(const CPolynom & polynom)
 			{
 				result.arrMonom[k].degree = polF.arrMonom[i].degree;
 				result.arrMonom[k].coef = polF.arrMonom[i].coef + polS.arrMonom[j].coef;
+				if (result.arrMonom[k].coef == 0)
+				{
+
+				}
 				i++;
 				j++;
 			}
 			k++;
 		}
+	TLink *p = pHead;
 	for (size_t i = 0; i < result.numMonom; i++)
 	{
-		result.pHead->InsLast(arrMonom[i]);
+		p->pNext;
+		p->monom = arrMonom[i];
 	}
 	return result;
 }
@@ -243,30 +270,24 @@ CPolynom CPolynom::operator*(double const c)
 	return result;
 }
 
-string CPolynom::ToString()
-{
-	
-}
-
 double CPolynom::Calculate()
 {
 	double result = 0;
-	double * arrArg = new double(numVar);
+	double * arrArg = new double[numVar];
 	for (size_t i = 0; i < numVar; i++)
 	{
 		cout << arrVar[i] << " = ";
 		cin >> arrArg[i];
 		cout << endl;
 	}
-	CPolynom temp = *this;
 	for (size_t i = 0; i < numMonom; i++)
 	{		
 		double tempMonom = 1;
 		for (size_t j = 0; j < numVar; j++)
 		{
-			tempMonom *= pow(arrArg[j], (int)temp.arrMonom[i].degree / pow(power, numVar - 1 - j));
+			tempMonom *= pow(arrArg[j], (int)arrMonom[i].degree / pow(power, numVar - 1 - j));
 		}
-		result += temp.arrMonom[i].coef*tempMonom;
+		result += arrMonom[i].coef*tempMonom;
 	}
 	return result;
 }

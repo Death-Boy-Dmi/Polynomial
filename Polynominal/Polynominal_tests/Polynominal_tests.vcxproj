@@ -151,7 +151,6 @@
   <ItemGroup>
     <ClCompile Include="ClassPolynom_tests.cpp" />
     <ClCompile Include="Main_tests.cpp" />
-    <ClCompile Include="TList_tests.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

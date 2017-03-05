@@ -1,6 +1,5 @@
 #pragma once
 
-#include "TList.h"
 #include <iostream>
 #include <string>
 
@@ -11,12 +10,22 @@ struct TMonom
 	double coef;
 	int degree;
 };
-
+struct TLink
+{
+	TMonom monom;
+	TLink *pNext;
+};
 class CPolynom
 {
-	TCircularList<TMonom> *pHead;
-	static unsigned int power;
-
+	TLink *pHead;
+	unsigned int power;
+	void CreateHead()
+	{
+		pHead = new TLink;
+		pHead->monom.coef = 0;
+		pHead->monom.degree = -1;
+		pHead->pNext = pHead;
+	}
 	string* arrStrMon;	// массив объявленных переменных
 	size_t numMonom;	// количество мономов
 	TMonom* arrMonom;	// массив мономов
@@ -26,13 +35,12 @@ public:
 	void ToArrVar(string strVar);		// перевод в массив объявленных переменных
 	void ToArrStrMon(string strPol);	// перевод в массив строчных мономов
 
-	CPolynom(char *str, static unsigned int pow);
-	CPolynom(string strPol, string strVar, static unsigned int pow);
+	CPolynom(string strPol, string strVar, unsigned int pow);
 	~CPolynom();
 	CPolynom();
 	
 	CPolynom operator + (const CPolynom &polynom);
 	CPolynom operator * (double const c);
-	string ToString(const CPolynom polynom); 
+	string ToString(); 
 	double Calculate();
 };
