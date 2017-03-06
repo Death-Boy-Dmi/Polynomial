@@ -5,7 +5,7 @@ void main()
 	string strPol;
 	string strVar;
 	double res;
-	unsigned int power;
+	static unsigned int power;
 	char * ch;
 
 	cout << "Enter the names of variabels as a priority (through a space):\n\t";

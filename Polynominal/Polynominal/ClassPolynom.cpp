@@ -21,16 +21,19 @@ void CPolynom::ToArrVar(string strVar)
 		sV.erase(sV.find("  "), 1);
 	}
 	sV += " ";
-	for (unsigned int i = 0; i < sV.size(); i++)
+	for (size_t i = 0; i < sV.size(); i++)
 		if (sV[i] == ' ')
-			numVar++;
-		
-	arrVar = new string [numVar]; // создание массива переменных
-	for (unsigned int i = 0; i < numVar; i++)
+			numVar++;	
+	arrVar = new string[numVar]; // создание массива переменных
+	for (size_t i = 0; i < numVar; i++)
 	{
-		unsigned int pos = sV.find(" ");
+		arrVar[i] = "";
+	}
+	for (size_t i = 0; i < numVar; i++)
+	{
+		size_t pos = sV.find(" ");
 		string strTemp = sV;
-		arrVar[i] = strTemp.erase(pos, strTemp.size() - pos);
+		arrVar[i] += strTemp.erase(pos, strTemp.size() - pos);
 		sV.erase(0, pos + 1);
 	}
 }
@@ -80,9 +83,15 @@ void CPolynom::ToArrStrMon(string strPol)
 	
 	arrStrMon = new string[numMonom];
 	sP += " ";
-	for (unsigned int i = 0; i < numVar; i++)
+	for (unsigned int i = 0; i < numMonom; i++)
 	{
 		unsigned int pos = sP.find(" ");
+		if (sP.find(" ") != string::npos)
+			pos = sP.find(" ");
+		if (sP.find("+") != string::npos)
+			pos = sP.find("+");
+		if (sP.find("-") != string::npos)
+			pos = sP.find("-");
 		string strTemp = sP;
 		strTemp = strTemp.erase(pos, strTemp.size() - pos);
 		arrStrMon[i] = strTemp;
@@ -110,16 +119,13 @@ CPolynom::CPolynom(string strPol, string strVar, unsigned int power)
 	arrMonom = new TMonom[numMonom];
 	for (size_t i = 0; i < numMonom; i++)
 	{
-		for (size_t j = 0; j < numVar; j++)
-		{
-			size_t pos = arrStrMon[i].find(arrVar[j]);
-			string strTemp = arrStrMon[i];
-			strTemp = strTemp.erase(pos, arrStrMon[i].size() - pos);
-			if (strTemp.size() == NULL)
-				arrMonom[i].coef = 1;
-			else
+		size_t pos = sP.find(arrStrMon[i]);
+		string strTemp = arrStrMon[i];
+		strTemp = strTemp.erase(pos, arrStrMon[i].size() - pos);
+		if (strTemp.size() == NULL)
+			arrMonom[i].coef = 1;
+		else
 			arrMonom[i].coef = atof(strTemp.c_str());
-		}
 	}
 
 	// добавление ^0 & ^1 к переменным в мономах
