@@ -85,17 +85,50 @@ void CPolynom::ToArrStrMon(string strPol)
 	sP += " ";
 	for (unsigned int i = 0; i < numMonom; i++)
 	{
-		unsigned int pos = sP.find(" ");
+		unsigned int posA, posM, posS;
 		if (sP.find(" ") != string::npos)
-			pos = sP.find(" ");
+			posS = sP.find(" ");
+		else
+		{
+			posS = sP.size() + 2;
+		}
 		if (sP.find("+") != string::npos)
-			pos = sP.find("+");
+			posA = sP.find("+");
+		else
+		{
+			posA = sP.size() + 2;
+		}
 		if (sP.find("-") != string::npos)
-			pos = sP.find("-");
+			posM = sP.find("-");
+		else
+		{
+			posM = sP.size() + 2;
+		}
 		string strTemp = sP;
-		strTemp = strTemp.erase(pos, strTemp.size() - pos);
-		arrStrMon[i] = strTemp;
-		sP = sP.erase(0, pos);
+		if (sP.find("-") != string::npos && posM < posS && posM < posA)
+		{
+			strTemp = strTemp.erase(posM, strTemp.size() - posM);
+			arrStrMon[i] = strTemp;
+			sP = sP.erase(0, posM++);
+		}
+		else
+			if (sP.find("+") != string::npos && posA < posS && posA < posM)
+			{
+				strTemp = strTemp.erase(posA, strTemp.size() - posA);
+				arrStrMon[i] = strTemp;
+				posA++;
+				sP = sP.erase(0, posA);
+			}
+			else
+			{
+				if (sP.find(" ") != string::npos)
+				{
+					strTemp = strTemp.erase(posS, strTemp.size() - posS);
+					arrStrMon[i] = strTemp;
+					posS++;
+					sP = sP.erase(0, posS);
+				}
+			}
 	}
 }
 
