@@ -18,7 +18,7 @@ struct TLink
 class CPolynom
 {
 	TLink *pHead;
-	unsigned int power;
+	unsigned int mainPower;
 	void CreateHead()
 	{
 		pHead = new TLink;

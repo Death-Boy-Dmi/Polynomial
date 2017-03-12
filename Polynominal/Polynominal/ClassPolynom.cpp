@@ -107,7 +107,7 @@ CPolynom::CPolynom()
 CPolynom::CPolynom(string strPol, string strVar, unsigned int power)
 {
 	CreateHead();
-
+	mainPower = power;
 	// перевод строки с переменными в массив переменных
 	ToArrVar(strVar);
 	// перевод строки полинома в массив строк мономов
@@ -170,28 +170,26 @@ CPolynom::CPolynom(string strPol, string strVar, unsigned int power)
 		for (size_t j = 0; j < numVar; j++)
 		{
 			size_t posVar = monomWithOutVar.find(arrVar[j]);
-			size_t posPow = monomWithOutVar.find("^");
-			monomWithOutVar = monomWithOutVar.erase(posVar, posPow - posVar);
+			size_t lengthVarStr = arrVar[j].length();
+			monomWithOutVar = monomWithOutVar.erase(posVar, lengthVarStr);
 		}
-		unsigned int *arrPow = new unsigned int[numVar];
+ 		unsigned int *arrPow = new unsigned int[numVar];
 		arrMonom[i].degree = 0;
-		for (size_t j = 0; j < numVar; i++)
+		for (size_t j = 0; j < numVar; j++)
 		{
 			string tmp = monomWithOutVar.erase(0,1);
 			size_t pos;
-			if (pos = monomWithOutVar.find("^") == string::npos)
+			if (monomWithOutVar.find("^") == string::npos)
 			{
-				arrMonom[i].degree = atoi(tmp.c_str());
-				break;
+				arrMonom[i].degree += atoi(tmp.c_str());
 			}
 			else
 			{
+				pos = monomWithOutVar.find("^");
 				tmp = tmp.erase(pos, tmp.size() + 1 - pos);
 				arrPow[j] = atoi(tmp.c_str());
 				monomWithOutVar.erase(0, pos);
 				arrMonom[i].degree += arrPow[j] * pow(power, numVar - 1 - j);
-				if (pos = monomWithOutVar.find("^") == string::npos)
-					break;
 			}
 		}
 	}
@@ -278,6 +276,7 @@ CPolynom CPolynom::operator*(double const c)
 
 double CPolynom::Calculate()
 {
+	unsigned int power = mainPower;
 	double result = 0;
 	double * arrArg = new double[numVar];
 	for (size_t i = 0; i < numVar; i++)
@@ -287,11 +286,15 @@ double CPolynom::Calculate()
 		cout << endl;
 	}
 	for (size_t i = 0; i < numMonom; i++)
-	{		
+	{
+		int tmp = arrMonom[i].degree;
 		double tempMonom = 1;
 		for (size_t j = 0; j < numVar; j++)
 		{
-			tempMonom *= pow(arrArg[j], (int)arrMonom[i].degree / pow(power, numVar - 1 - j));
+			int tmpDelPow = pow(power, numVar - 1 - j);
+			int tmpPower = (int)( tmp / tmpDelPow );
+			tempMonom *= pow(arrArg[j], tmpPower);
+			tmp = tmp % (int)(pow(power, numVar - 1 - j));
 		}
 		result += arrMonom[i].coef*tempMonom;
 	}

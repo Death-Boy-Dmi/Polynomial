@@ -8,16 +8,16 @@ void main()
 	static unsigned int power;
 	char * ch;
 
-	cout << "Enter the names of variabels as a priority (through a space):\n\t";
+	cout << "Enter the names of variabels as a priority (through a space):\n\n\t";
 	getline (cin,strVar);
-
-	cout << "Enter power:\t";
+	cout << "\n";
+	cout << "Enter power:\n\n\t";
 	cin >> power;
-
-	cout << "Enter the polynom:\n\t";
+	cout << "\n";
+	cout << "Enter the polynom:\n\n\t";
 	cin >> strPol;
-
+	cout << "\n";
 	CPolynom polinom(strPol, strVar, power);
 	res = polinom.Calculate();
-	cout << res;
+	cout << "\tresult = " << res << endl;
 }
