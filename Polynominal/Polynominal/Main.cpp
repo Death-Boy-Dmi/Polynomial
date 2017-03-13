@@ -20,4 +20,5 @@ void main()
 	CPolynom polinom(strPol, strVar, power);
 	res = polinom.Calculate();
 	cout << "\tresult = " << res << endl;
+	getchar();
 }

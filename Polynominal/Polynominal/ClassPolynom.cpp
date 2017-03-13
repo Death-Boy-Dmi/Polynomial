@@ -148,19 +148,6 @@ CPolynom::CPolynom(string strPol, string strVar, unsigned int power)
 
 	string sP = strPol;
 
-	// заполнение коэффициентов
-	arrMonom = new TMonom[numMonom];
-	for (size_t i = 0; i < numMonom; i++)
-	{
-		size_t pos = sP.find(arrStrMon[i]);
-		string strTemp = arrStrMon[i];
-		strTemp = strTemp.erase(pos, arrStrMon[i].size() - pos);
-		if (strTemp.size() == NULL)
-			arrMonom[i].coef = 1;
-		else
-			arrMonom[i].coef = atof(strTemp.c_str());
-	}
-
 	// добавление ^0 & ^1 к переменным в мономах
 	for (size_t i = 0; i < numMonom; i++)
 	{
@@ -195,6 +182,19 @@ CPolynom::CPolynom(string strPol, string strVar, unsigned int power)
 		}
 	}
 
+	// заполнение коэффициентов
+	arrMonom = new TMonom[numMonom];
+	for (size_t i = 0; i < numMonom; i++)
+	{
+		size_t pos = sP.find(arrVar[0]);
+		string strTemp = arrStrMon[i];
+		strTemp = strTemp.erase(pos, arrStrMon[i].size() - pos);
+		if (strTemp.size() == NULL)
+			arrMonom[i].coef = 1;
+		else
+			arrMonom[i].coef = atof(strTemp.c_str());
+	}
+
 	// заполнение степеней
 	for (size_t i = 0; i < numMonom; i++)
 	{
@@ -227,16 +227,19 @@ CPolynom::CPolynom(string strPol, string strVar, unsigned int power)
 		}
 	}
 
+	// bublesort
 	for (size_t i = 0; i < numMonom; i++)
 		for (size_t j = numMonom - 1; j > i; j--)
 			if (arrMonom[j - 1].degree > arrMonom[j].degree)
 				swap(arrMonom[j - 1].degree, arrMonom[j].degree);
 	TLink *p = new TLink;
+	TLink *tmp = new TLink;
 	for (size_t i = 0; i < numMonom; i++)
 	{
 		if (i != 0)
 			p = p->pNext;
 		p->monom = arrMonom[i];
+		p->pNext = tmp;
 	}
 	p->pNext = pHead;
 	pHead->pNext = p;

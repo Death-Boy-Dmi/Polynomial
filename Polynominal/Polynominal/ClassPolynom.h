@@ -14,6 +14,11 @@ struct TLink
 {
 	TMonom monom;
 	TLink *pNext;
+	TLink()
+	{
+		monom.coef = 0;
+		monom.degree = -1;
+	}
 };
 class CPolynom
 {
