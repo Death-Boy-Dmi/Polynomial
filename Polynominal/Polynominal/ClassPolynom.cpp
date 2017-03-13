@@ -54,16 +54,6 @@ void CPolynom::ToArrStrMon(string strPol)
 		string str = " " + strPol + " ";
 		string arop = "-+";
 		string var = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-		for (size_t i = 0; i < str.length(); i++)
-			if (arop.find(str[i]) >= 0 && arop.find(str[i]) <= str.length())
-			{
-				if ((var.find(str[i - 1]) >= 0 && var.find(str[i - 1]) <= var.length())
-					&& (var.find(str[i + 1]) >= 0 && var.find(str[i - 1]) <= var.length())
-					|| (str[i + 1] == '(' && str[i - 1] == ')'))
-					continue;
-				else
-					throw "the number of variables does not correspond to the numbers of operations";
-			}
 		if (strPol[0] == '^')
 			throw "First character is operations";
 		if (strPol[strPol.length() - 1] == '-' || strPol[strPol.length() - 1] == '+' || strPol[strPol.length() - 1] == '^')
@@ -172,7 +162,7 @@ CPolynom::CPolynom(string strPol, string strVar, unsigned int power)
 			}
 			else
 			{
-				if (arrStrMon[i][posVar + 1] != '^')
+				if (arrStrMon[i][posVar+arrVar[j].size() + 1] != '^')
 				{
 					string strTemp = arrStrMon[i];
 					arrStrMon[i] = arrStrMon[i].erase(posVar, (arrStrMon[i].size() - posVar));
