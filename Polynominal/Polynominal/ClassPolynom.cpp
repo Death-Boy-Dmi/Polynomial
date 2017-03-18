@@ -112,40 +112,6 @@ CPolynom::CPolynom(string strPol, string strVar, unsigned int power)
 
 	string sP = strPol;
 
-	// добавление ^0 & ^1 к переменным в мономах
-	//for (size_t i = 0; i < numMonom; i++)
-	//{
-	//	for (size_t j = 0; j < numVar; j++)
-	//	{
-	//		size_t posVar;
-	//		if (posVar = arrStrMon[i].find(arrVar[j]) == string::npos)
-	//		{
-	//			size_t jj = j;
-	//			size_t posNextVar;
-	//			while (posNextVar = arrStrMon[i].find(arrVar[jj]) == string::npos && jj < numVar)
-	//			{
-	//				jj++;
-	//			}
-	//			if (jj == numVar)
-	//			{
-	//				arrStrMon[i] += arrVar[j] + "^0";
-	//			}
-	//			string strTemp = arrStrMon[i];
-	//			arrStrMon[i] = arrStrMon[i].erase(posNextVar, (arrStrMon[i].size() - posNextVar));
-	//			arrStrMon[i] += arrVar[i] + "^0" + strTemp.erase(0, posNextVar + 1);
-	//		}
-	//		else
-	//		{
-	//			if (arrStrMon[i][posVar+arrVar[j].size() + 1] != '^')
-	//			{
-	//				string strTemp = arrStrMon[i];
-	//				arrStrMon[i] = arrStrMon[i].erase(posVar, (arrStrMon[i].size() - posVar));
-	//				arrStrMon[i] += arrVar[i] + "^1" + strTemp.erase(0, posVar + 1);
-	//			}
-	//		}
-	//	}
-	//}
-
 	// заполнение коэффициентов
 	arrMonom = new TMonom[numMonom];
 	for (size_t i = 0; i < numMonom; i++)
@@ -199,6 +165,7 @@ CPolynom::CPolynom(string strPol, string strVar, unsigned int power)
 		for (size_t j = numMonom - 1; j > i; j--)
 			if (arrMonom[j - 1].degree > arrMonom[j].degree)
 				swap(arrMonom[j - 1].degree, arrMonom[j].degree);
+
 	TLink *p = new TLink;
 	TLink *tmp = new TLink;
 	for (size_t i = 0; i < numMonom; i++)
