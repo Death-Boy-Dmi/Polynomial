@@ -61,7 +61,12 @@ void CPolynom::ToArrStrMon(string strPol)
 	}
 
 	string sP = strPol;
+
 	numMonom = 0;
+	if (sP[0] != '+' && sP[0] != '-')
+	{
+		sP = "+" + sP;
+	}
 	for (size_t i = 0; i < sP.size(); i++)
 	{
 		if (sP[i] == '+' || sP[i] == '-')
@@ -69,57 +74,26 @@ void CPolynom::ToArrStrMon(string strPol)
 			numMonom++;
 		}
 	}
-	numMonom++;
 	
 	arrStrMon = new string[numMonom];
 	sP += " ";
 	for (unsigned int i = 0; i < numMonom; i++)
 	{
-		unsigned int posA, posM, posS;
-		if (sP.find(" ") != string::npos)
-			posS = sP.find(" ");
-		else
+		size_t pos;
+		for (size_t j = 1; j < sP.size(); j++)
 		{
-			posS = sP.size() + 2;
-		}
-		if (sP.find("+") != string::npos)
-			posA = sP.find("+");
-		else
-		{
-			posA = sP.size() + 2;
-		}
-		if (sP.find("-") != string::npos)
-			posM = sP.find("-");
-		else
-		{
-			posM = sP.size() + 2;
+			if (sP[j] == '+' || sP[j] == '-' || sP[j] == ' ')
+			{
+				pos = j;
+				break;
+			}
 		}
 		string strTemp = sP;
-		if (sP.find("-") != string::npos && posM < posS && posM < posA)
-		{
-			strTemp = strTemp.erase(posM, strTemp.size() - posM);
-			arrStrMon[i] = strTemp;
-			sP = sP.erase(0, posM++);
-		}
-		else
-			if (sP.find("+") != string::npos && posA < posS && posA < posM)
-			{
-				strTemp = strTemp.erase(posA, strTemp.size() - posA);
-				arrStrMon[i] = strTemp;
-				posA++;
-				sP = sP.erase(0, posA);
-			}
-			else
-			{
-				if (sP.find(" ") != string::npos)
-				{
-					strTemp = strTemp.erase(posS, strTemp.size() - posS);
-					arrStrMon[i] = strTemp;
-					posS++;
-					sP = sP.erase(0, posS);
-				}
-			}
-	}
+		strTemp = strTemp.erase(pos, strTemp.size() - pos - 1);
+		arrStrMon[i] = strTemp;
+		sP = sP.erase(0, pos);
+	}			
+	
 }
 
 CPolynom::CPolynom()
@@ -139,50 +113,53 @@ CPolynom::CPolynom(string strPol, string strVar, unsigned int power)
 	string sP = strPol;
 
 	// добавление ^0 & ^1 к переменным в мономах
-	for (size_t i = 0; i < numMonom; i++)
-	{
-		for (size_t j = 0; j < numVar; j++)
-		{
-			size_t posVar;
-			if (posVar = arrStrMon[i].find(arrVar[j]) == string::npos)
-			{
-				size_t jj = j;
-				size_t posNextVar;
-				while (posNextVar = arrStrMon[i].find(arrVar[jj]) == string::npos && jj < numVar)
-				{
-					jj++;
-				}
-				if (jj == numVar)
-				{
-					arrStrMon[i] += arrVar[j] + "^0";
-				}
-				string strTemp = arrStrMon[i];
-				arrStrMon[i] = arrStrMon[i].erase(posNextVar, (arrStrMon[i].size() - posNextVar));
-				arrStrMon[i] += arrVar[i] + "^0" + strTemp.erase(0, posNextVar + 1);
-			}
-			else
-			{
-				if (arrStrMon[i][posVar+arrVar[j].size() + 1] != '^')
-				{
-					string strTemp = arrStrMon[i];
-					arrStrMon[i] = arrStrMon[i].erase(posVar, (arrStrMon[i].size() - posVar));
-					arrStrMon[i] += arrVar[i] + "^1" + strTemp.erase(0, posVar + 1);
-				}
-			}
-		}
-	}
+	//for (size_t i = 0; i < numMonom; i++)
+	//{
+	//	for (size_t j = 0; j < numVar; j++)
+	//	{
+	//		size_t posVar;
+	//		if (posVar = arrStrMon[i].find(arrVar[j]) == string::npos)
+	//		{
+	//			size_t jj = j;
+	//			size_t posNextVar;
+	//			while (posNextVar = arrStrMon[i].find(arrVar[jj]) == string::npos && jj < numVar)
+	//			{
+	//				jj++;
+	//			}
+	//			if (jj == numVar)
+	//			{
+	//				arrStrMon[i] += arrVar[j] + "^0";
+	//			}
+	//			string strTemp = arrStrMon[i];
+	//			arrStrMon[i] = arrStrMon[i].erase(posNextVar, (arrStrMon[i].size() - posNextVar));
+	//			arrStrMon[i] += arrVar[i] + "^0" + strTemp.erase(0, posNextVar + 1);
+	//		}
+	//		else
+	//		{
+	//			if (arrStrMon[i][posVar+arrVar[j].size() + 1] != '^')
+	//			{
+	//				string strTemp = arrStrMon[i];
+	//				arrStrMon[i] = arrStrMon[i].erase(posVar, (arrStrMon[i].size() - posVar));
+	//				arrStrMon[i] += arrVar[i] + "^1" + strTemp.erase(0, posVar + 1);
+	//			}
+	//		}
+	//	}
+	//}
 
 	// заполнение коэффициентов
 	arrMonom = new TMonom[numMonom];
 	for (size_t i = 0; i < numMonom; i++)
 	{
-		size_t pos = sP.find(arrVar[0]);
 		string strTemp = arrStrMon[i];
+		size_t pos = strTemp.find(arrVar[0]);
 		strTemp = strTemp.erase(pos, arrStrMon[i].size() - pos);
-		if (strTemp.size() == NULL)
+		if (strTemp == "+")
 			arrMonom[i].coef = 1;
 		else
-			arrMonom[i].coef = atof(strTemp.c_str());
+			if (strTemp == "-")
+				arrMonom[i].coef = -1;
+			else
+				arrMonom[i].coef = atof(strTemp.c_str());
 	}
 
 	// заполнение степеней
