@@ -101,6 +101,67 @@ CPolynom::CPolynom()
 	CreateHead();
 }
 
+CPolynom CPolynom::operator+(const CPolynom & polynom)
+{
+	CPolynom result;
+	result.CreateHead();
+	CPolynom polF = *this;
+	CPolynom polS(polynom);
+	TLink *pF = polF.pHead;
+	TLink *pS = polS.pHead;
+	TLink *pR = new TLink;
+	pR = result.pHead;
+	while (pF->pNext != polF.pHead)
+		while (pS->pNext != polS.pHead)
+		{
+			if (pF->monom.degree > pS->monom.degree)
+			{
+				pR->pNext = pF;
+				pF = pF->pNext;
+			}
+			if (pF->monom.degree < pS->monom.degree)
+			{
+				pR->pNext = pS;
+				pS = pF->pNext;
+			}
+			if (pF->monom.degree == pS->monom.degree)
+			{
+				pR->pNext->monom.coef = pF->monom.coef + pS->monom.coef;
+				pR->pNext->monom.degree = pS->monom.degree;
+				pS = pF->pNext;
+				pF = pF->pNext;
+			}
+			pR = pR->pNext;
+		}
+
+	pR->pNext = result.pHead;
+
+	return result;
+}
+
+CPolynom CPolynom::operator*(double const c)
+{
+	CPolynom result = *this;
+	for (size_t i = 0; i < numMonom; i++)
+	{
+		result.arrMonom[i].coef = arrMonom[i].coef * c;
+		result.arrMonom[i].degree = arrMonom[i].coef * c;
+	}
+	TLink *p = new TLink;
+	TLink *tmp = new TLink;
+	for (size_t i = 0; i < numMonom; i++)
+	{
+		if (i != 0)
+			p = p->pNext;
+		p->monom = arrMonom[i];
+		p->pNext = tmp;
+	}
+	p->pNext = result.pHead;
+	result.pHead->pNext = p;
+
+	return result;
+}
+
 CPolynom::CPolynom(string strPol, string strVar, unsigned int power)
 {
 	CreateHead();
@@ -187,60 +248,26 @@ CPolynom::~CPolynom()
 	delete[] arrVar;
 }
 
-CPolynom CPolynom::operator+(const CPolynom & polynom)
+string CPolynom::ToString()
 {
-	CPolynom polF = *this;
-	CPolynom polS(polynom);
-	CPolynom result;
-	result.arrMonom = new TMonom[polF.numMonom + polS.numMonom];
-	TMonom mon_null;
-	mon_null.coef = 0;
-	mon_null.degree = -1;
-	result.CreateHead();
-	unsigned int k = 0, i = 1, j = 1;
-	TLink *pF = polF.pHead;
-	TLink *pS = polS.pHead;
-	while (pF->pNext!=polF.pHead)
-		while (pS->pNext != polS.pHead)
-		{
-
-			if (polF.arrMonom[i].degree > polS.arrMonom[j].degree)
-			{
-				result.arrMonom[k] = polF.arrMonom[i];
-				i++;
-			}
-			else
-			{
-				result.arrMonom[k] = polS.arrMonom[j];
-				j++;
-			}
-			if (polF.arrMonom[i].degree == polS.arrMonom[j].degree)
-			{
-				result.arrMonom[k].degree = polF.arrMonom[i].degree;
-				result.arrMonom[k].coef = polF.arrMonom[i].coef + polS.arrMonom[j].coef;
-				if (result.arrMonom[k].coef == 0)
-				{
-
-				}
-				i++;
-				j++;
-			}
-			k++;
-		}
-	TLink *p = pHead;
-	for (size_t i = 0; i < result.numMonom; i++)
-	{
-		p->pNext;
-		p->monom = arrMonom[i];
-	}
-	return result;
-}
-
-CPolynom CPolynom::operator*(double const c)
-{
-	CPolynom result = *this;
+	string result = "";
+	pHead = pHead->pNext;
 	for (size_t i = 0; i < numMonom; i++)
-		result.arrMonom[i].coef *= c;
+	{
+		string strCoef = to_string(arrMonom[i].coef);
+		if (arrMonom[i].coef > 0)
+			strCoef = "+" + strCoef;
+		if (arrMonom[i].coef == 0)
+			continue;
+		result += strCoef + "*";
+		unsigned int deg = arrMonom[i].degree;
+		for (size_t j = 0; j < numVar; j++)
+		{
+			result += arrVar[j] + "^" + to_string(deg / pow(mainPower, numVar - 1 - j));
+			deg = deg % (int)pow(mainPower, numVar - 1 - j);
+		}
+	}
+
 	return result;
 }
 

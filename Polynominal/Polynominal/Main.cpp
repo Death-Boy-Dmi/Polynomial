@@ -20,5 +20,6 @@ void main()
 	CPolynom polinom(strPol, strVar, power);
 	res = polinom.Calculate();
 	cout << "\tresult = " << res << endl;
-	getchar();
+	cout << "\n\n\t" << polinom.ToString() << endl;
+	system("PAUSE");
 }
