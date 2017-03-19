@@ -112,8 +112,8 @@ CPolynom CPolynom::operator+(const CPolynom & polynom)
 	TLink *pR = new TLink;
 	TLink *tmp = new TLink;
 	pR->pNext = tmp;
-	while (pF->pNext != polF.pHead)
-		while (pS->pNext != polS.pHead)
+	while (pF != polF.pHead)
+		while (pS != polS.pHead)
 		{
 			if (pF->monom.degree > pS->monom.degree)
 			{
@@ -145,7 +145,7 @@ CPolynom CPolynom::operator*(double const c)
 {
 	TLink *pR = new TLink;
 	pR = pHead->pNext;
-	while (pR->pNext != pHead)
+	while (pR != pHead)
 	{
 		pR->monom.coef *= c;
 		pR = pR->pNext;
@@ -243,14 +243,17 @@ string CPolynom::ToString()
 {
 	string result = "";
 	TLink *p = new TLink;
-	pHead->pNext = p;
-	while (p->pNext != pHead)
+	p = pHead->pNext;
+	while (p != pHead)
 	{
 		string strCoef = to_string(p->monom.coef);
 		if (p->monom.coef > 0)
 			strCoef = "+" + strCoef;
 		if (p->monom.coef == 0)
+		{
 			continue;
+			p = p->pNext;
+		}
 		result += strCoef + "*";
 		unsigned int deg = p->monom.degree;
 		for (size_t j = 0; j < numVar; j++)
@@ -275,9 +278,11 @@ double CPolynom::Calculate()
 		cin >> arrArg[i];
 		cout << endl;
 	}
-	for (size_t i = 0; i < numMonom; i++)
+	TLink *p = new TLink;
+	p = pHead->pNext;
+	while (p != pHead)
 	{
-		int tmp = arrMonom[i].degree;
+		int tmp = p->monom.degree;
 		double tempMonom = 1;
 		for (size_t j = 0; j < numVar; j++)
 		{
@@ -286,7 +291,8 @@ double CPolynom::Calculate()
 			tempMonom *= pow(arrArg[j], tmpPower);
 			tmp = tmp % (int)(pow(power, numVar - 1 - j));
 		}
-		result += arrMonom[i].coef*tempMonom;
+		result += p->monom.coef*tempMonom;
+		p = p->pNext;
 	}
 	return result;
 }
