@@ -110,7 +110,8 @@ CPolynom CPolynom::operator+(const CPolynom & polynom)
 	TLink *pF = polF.pHead;
 	TLink *pS = polS.pHead;
 	TLink *pR = new TLink;
-	pR = result.pHead;
+	TLink *tmp = new TLink;
+	pR->pNext = tmp;
 	while (pF->pNext != polF.pHead)
 		while (pS->pNext != polS.pHead)
 		{
@@ -132,8 +133,9 @@ CPolynom CPolynom::operator+(const CPolynom & polynom)
 				pF = pF->pNext;
 			}
 			pR = pR->pNext;
+			pR->pNext = tmp;
 		}
-
+	result.pHead->pNext = pR;
 	pR->pNext = result.pHead;
 
 	return result;
@@ -141,25 +143,14 @@ CPolynom CPolynom::operator+(const CPolynom & polynom)
 
 CPolynom CPolynom::operator*(double const c)
 {
-	CPolynom result = *this;
-	for (size_t i = 0; i < numMonom; i++)
+	TLink *pR = new TLink;
+	pR = pHead->pNext;
+	while (pR->pNext != pHead)
 	{
-		result.arrMonom[i].coef = arrMonom[i].coef * c;
-		result.arrMonom[i].degree = arrMonom[i].coef * c;
+		pR->monom.coef *= c;
+		pR = pR->pNext;
 	}
-	TLink *p = new TLink;
-	TLink *tmp = new TLink;
-	for (size_t i = 0; i < numMonom; i++)
-	{
-		if (i != 0)
-			p = p->pNext;
-		p->monom = arrMonom[i];
-		p->pNext = tmp;
-	}
-	p->pNext = result.pHead;
-	result.pHead->pNext = p;
-
-	return result;
+	return *this;
 }
 
 CPolynom::CPolynom(string strPol, string strVar, unsigned int power)
@@ -251,21 +242,23 @@ CPolynom::~CPolynom()
 string CPolynom::ToString()
 {
 	string result = "";
-	pHead = pHead->pNext;
-	for (size_t i = 0; i < numMonom; i++)
+	TLink *p = new TLink;
+	pHead->pNext = p;
+	while (p->pNext != pHead)
 	{
-		string strCoef = to_string(arrMonom[i].coef);
-		if (arrMonom[i].coef > 0)
+		string strCoef = to_string(p->monom.coef);
+		if (p->monom.coef > 0)
 			strCoef = "+" + strCoef;
-		if (arrMonom[i].coef == 0)
+		if (p->monom.coef == 0)
 			continue;
 		result += strCoef + "*";
-		unsigned int deg = arrMonom[i].degree;
+		unsigned int deg = p->monom.degree;
 		for (size_t j = 0; j < numVar; j++)
 		{
 			result += arrVar[j] + "^" + to_string(deg / pow(mainPower, numVar - 1 - j));
 			deg = deg % (int)pow(mainPower, numVar - 1 - j);
 		}
+		p = p->pNext;
 	}
 
 	return result;
