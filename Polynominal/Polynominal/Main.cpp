@@ -6,7 +6,6 @@ void main()
 	string strVar;
 	double res;
 	static unsigned int power;
-	char * ch;
 
 	cout << "Enter the names of variabels as a priority (through a space):\n\n\t";
 	getline (cin,strVar);

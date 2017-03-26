@@ -269,7 +269,16 @@ CPolynom::CPolynom(string strPol, string strVar, unsigned int power)
 
 CPolynom::~CPolynom()
 {
-	delete pHead;
+	TLink *p = new TLink;
+	p = pHead->pNext;
+	TLink *tmp = new TLink;
+	while (p != pHead)
+	{
+		tmp = p->pNext;
+		delete p;
+		p = tmp;
+	}
+	delete p;
 	delete[] arrStrMon;
 	delete arrMonom;
 	delete[] arrVar;
