@@ -163,6 +163,42 @@ CPolynom::CPolynom(string strPol, string strVar, unsigned int power)
 	ToArrStrMon(strPol);
 
 	string sP = strPol;
+	
+	// добавление ^0 & ^1 к переменным 
+	for (size_t i = 0; i<numMonom; i++)
+		for (size_t j = 0; j < numVar; j++)
+		{
+			if (arrStrMon[i].find(arrVar[j]) == string::npos)
+			{
+				if (j == 0)
+				{
+					size_t k = 0;
+					string digits = "0123456789.+-";
+					while (digits.find(arrStrMon[i][k]) != string::npos)
+					{
+						k++;
+					}
+					string var = arrVar[j] + "^0";
+					arrStrMon[i].insert(k, var);
+				}
+				else
+				{
+					size_t k = arrStrMon[i].find(arrVar[j - 1]) + arrVar[j - 1].length() + 1;
+					string digits = "0123456789.+-";
+					while (digits.find(arrStrMon[i][k]) != string::npos)
+					{
+						k++;
+					}
+					string var = arrVar[j] + "^0";
+					arrStrMon[i].insert(k, var);
+				}
+			}
+			if (arrStrMon[i][arrStrMon[i].find(arrVar[j]) + 1] != '^')
+			{
+				size_t pos = arrStrMon[i].find(arrVar[j]) + 1;
+				arrStrMon[i].insert(pos, "^1");
+			}
+		}
 
 	// заполнение коэффициентов
 	arrMonom = new TMonom[numMonom];
