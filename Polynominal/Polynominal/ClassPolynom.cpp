@@ -153,10 +153,9 @@ CPolynom CPolynom::operator*(double const c)
 	return *this;
 }
 
-CPolynom::CPolynom(string strPol, string strVar, unsigned int power)
+CPolynom::CPolynom(string strPol, string strVar)
 {
 	CreateHead();
-	mainPower = power;
 	// перевод строки с переменными в массив переменных
 	ToArrVar(strVar);
 	// перевод строки полинома в массив строк мономов
@@ -243,7 +242,7 @@ CPolynom::CPolynom(string strPol, string strVar, unsigned int power)
 				tmp = tmp.erase(pos, tmp.size() + 1 - pos);
 				arrPow[j] = atoi(tmp.c_str());
 				monomWithOutVar.erase(0, pos);
-				arrMonom[i].degree += arrPow[j] * pow(power, numVar - 1 - j);
+				arrMonom[i].degree += arrPow[j] * pow(Power, numVar - 1 - j);
 			}
 		}
 	}
@@ -296,8 +295,8 @@ string CPolynom::ToString()
 		unsigned int deg = p->monom.degree;
 		for (size_t j = 0; j < numVar; j++)
 		{
-			result += arrVar[j] + "^" + to_string(deg / pow(mainPower, numVar - 1 - j));
-			deg = deg % (int)pow(mainPower, numVar - 1 - j);
+			result += arrVar[j] + "^" + to_string(deg / pow(Power, numVar - 1 - j));
+			deg = deg % (int)pow(Power, numVar - 1 - j);
 		}
 		p = p->pNext;
 	}
@@ -307,7 +306,7 @@ string CPolynom::ToString()
 
 double CPolynom::Calculate()
 {
-	unsigned int power = mainPower;
+	unsigned int power = Power;
 	double result = 0;
 	double * arrArg = new double[numVar];
 	for (size_t i = 0; i < numVar; i++)

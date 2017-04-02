@@ -23,7 +23,6 @@ struct TLink
 class CPolynom
 {
 	TLink *pHead;
-	unsigned int mainPower;
 	void CreateHead()
 	{
 		pHead = new TLink;
@@ -36,10 +35,11 @@ class CPolynom
 	string* arrVar;		// массив объявленных переменных
 	size_t numVar;		// количество переменных
 public:
+	static unsigned int Power;
 	void ToArrVar(string strVar);		// перевод в массив объявленных переменных
 	void ToArrStrMon(string strPol);	// перевод в массив строчных мономов
 
-	CPolynom(string strPol, string strVar, unsigned int pow);
+	CPolynom(string strPol, string strVar);
 	~CPolynom();
 	CPolynom();
 	
