@@ -29,7 +29,6 @@ class CPolynom
 		pHead = new TLink;
 		pHead->monom.coef = 0;
 		pHead->monom.degree = -1;
-		pHead->pNext = pHead;
 	}
 	string* arrStrMon;	// массив объ€вленных переменных
 	size_t numMonom;	// количество мономов

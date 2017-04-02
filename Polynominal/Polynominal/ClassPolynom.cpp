@@ -254,17 +254,19 @@ CPolynom::CPolynom(string strPol, string strVar, unsigned int power)
 			if (arrMonom[j - 1].degree > arrMonom[j].degree)
 				swap(arrMonom[j - 1].degree, arrMonom[j].degree);
 
+
 	TLink *p = new TLink;
-	TLink *tmp = new TLink;
-	for (size_t i = 0; i < numMonom; i++)
+	pHead->pNext = p;
+	p->monom = arrMonom[0];
+	for (size_t i = 1; i < numMonom; i++)
 	{
-		if (i != 0)
-			p = p->pNext;
-		p->monom = arrMonom[i];
+		TLink *tmp = new TLink;
+		tmp->monom = arrMonom[i];
 		p->pNext = tmp;
+		p = tmp;
 	}
 	p->pNext = pHead;
-	pHead->pNext = p;
+	
 }
 
 CPolynom::~CPolynom()
