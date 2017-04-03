@@ -1,7 +1,7 @@
-#include "ClassPolynom.h"
+п»ї#include "ClassPolynom.h"
 #include <cmath>
 
-// перевод в массив объявленных переменных
+// РїРµСЂРµРІРѕРґ РІ РјР°СЃСЃРёРІ РѕР±СЉСЏРІР»РµРЅРЅС‹С… РїРµСЂРµРјРµРЅРЅС‹С…
 void CPolynom::ToArrVar(string strVar)	
 {
 	string sV = strVar;
@@ -24,7 +24,7 @@ void CPolynom::ToArrVar(string strVar)
 	for (size_t i = 0; i < sV.size(); i++)
 		if (sV[i] == ' ')
 			numVar++;	
-	arrVar = new string[numVar]; // создание массива переменных
+	arrVar = new string[numVar]; // СЃРѕР·РґР°РЅРёРµ РјР°СЃСЃРёРІР° РїРµСЂРµРјРµРЅРЅС‹С…
 	for (size_t i = 0; i < numVar; i++)
 	{
 		arrVar[i] = "";
@@ -38,7 +38,7 @@ void CPolynom::ToArrVar(string strVar)
 	}
 }
 
-// перевод в массив строчных мономов
+// РїРµСЂРµРІРѕРґ РІ РјР°СЃСЃРёРІ СЃС‚СЂРѕС‡РЅС‹С… РјРѕРЅРѕРјРѕРІ
 void CPolynom::ToArrStrMon(string strPol)
 {
 	{
@@ -156,14 +156,14 @@ CPolynom CPolynom::operator*(double const c)
 CPolynom::CPolynom(string strPol, string strVar)
 {
 	CreateHead();
-	// перевод строки с переменными в массив переменных
+	// РїРµСЂРµРІРѕРґ СЃС‚СЂРѕРєРё СЃ РїРµСЂРµРјРµРЅРЅС‹РјРё РІ РјР°СЃСЃРёРІ РїРµСЂРµРјРµРЅРЅС‹С…
 	ToArrVar(strVar);
-	// перевод строки полинома в массив строк мономов
+	// РїРµСЂРµРІРѕРґ СЃС‚СЂРѕРєРё РїРѕР»РёРЅРѕРјР° РІ РјР°СЃСЃРёРІ СЃС‚СЂРѕРє РјРѕРЅРѕРјРѕРІ
 	ToArrStrMon(strPol);
 
 	string sP = strPol;
 	
-	// добавление ^0 & ^1 к переменным 
+	// РґРѕР±Р°РІР»РµРЅРёРµ ^0 & ^1 Рє РїРµСЂРµРјРµРЅРЅС‹Рј 
 	for (size_t i = 0; i<numMonom; i++)
 		for (size_t j = 0; j < numVar; j++)
 		{
@@ -199,7 +199,7 @@ CPolynom::CPolynom(string strPol, string strVar)
 			}
 		}
 
-	// заполнение коэффициентов
+	// Р·Р°РїРѕР»РЅРµРЅРёРµ РєРѕСЌС„С„РёС†РёРµРЅС‚РѕРІ
 	arrMonom = new TMonom[numMonom];
 	for (size_t i = 0; i < numMonom; i++)
 	{
@@ -215,7 +215,7 @@ CPolynom::CPolynom(string strPol, string strVar)
 				arrMonom[i].coef = atof(strTemp.c_str());
 	}
 
-	// заполнение степеней
+	// Р·Р°РїРѕР»РЅРµРЅРёРµ СЃС‚РµРїРµРЅРµР№
 	for (size_t i = 0; i < numMonom; i++)
 	{
 		string monomWithOutVar = arrStrMon[i];
