@@ -22,6 +22,7 @@ void main()
 	
 	CPolynom polinom(strPol, strVar);
 	
+	polinom.StreamSetVar();
 	res = polinom.Calculate();
 	
 	cout << "\tresult = " << res << endl;

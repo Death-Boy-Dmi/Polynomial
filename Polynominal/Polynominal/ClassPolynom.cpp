@@ -38,6 +38,28 @@ void CPolynom::ToArrVar(string strVar)
 	}
 }
 
+void CPolynom::StreamSetVar()
+{
+	arrArg = new double[numVar];
+
+	for (size_t i = 0; i < numVar; i++)
+	{
+		cout << arrVar[i] << " = ";
+		cin >> arrArg[i];
+		cout << endl;
+	}
+}
+
+void CPolynom::SetVar(double * arr)
+{
+	arrArg = new double[numVar];
+
+	for (size_t i = 0; i < numVar; i++)
+	{
+		arrVar[i] = arr[i];
+	}
+}
+
 // перевод в массив строчных мономов
 void CPolynom::ToArrStrMon(string strPol)
 {
@@ -162,9 +184,9 @@ CPolynom::CPolynom(string strPol, string strVar)
 	ToArrStrMon(strPol);
 
 	string sP = strPol;
-	
+
 	// добавление ^0 & ^1 к переменным 
-	for (size_t i = 0; i<numMonom; i++)
+	for (size_t i = 0; i < numMonom; i++)
 		for (size_t j = 0; j < numVar; j++)
 		{
 			if (arrStrMon[i].find(arrVar[j]) == string::npos)
@@ -226,11 +248,11 @@ CPolynom::CPolynom(string strPol, string strVar)
 			size_t lengthVarStr = arrVar[j].length();
 			monomWithOutVar = monomWithOutVar.erase(posVar, lengthVarStr);
 		}
- 		unsigned int *arrPow = new unsigned int[numVar];
+		unsigned int *arrPow = new unsigned int[numVar];
 		arrMonom[i].degree = 0;
 		for (size_t j = 0; j < numVar; j++)
 		{
-			string tmp = monomWithOutVar.erase(0,1);
+			string tmp = monomWithOutVar.erase(0, 1);
 			size_t pos;
 			if (monomWithOutVar.find("^") == string::npos)
 			{
@@ -265,7 +287,6 @@ CPolynom::CPolynom(string strPol, string strVar)
 		p = tmp;
 	}
 	p->pNext = pHead;
-	
 }
 
 CPolynom::~CPolynom()
@@ -308,13 +329,7 @@ double CPolynom::Calculate()
 {
 	unsigned int power = Power;
 	double result = 0;
-	double * arrArg = new double[numVar];
-	for (size_t i = 0; i < numVar; i++)
-	{
-		cout << arrVar[i] << " = ";
-		cin >> arrArg[i];
-		cout << endl;
-	}
+
 	TLink *p = new TLink;
 	p = pHead->pNext;
 	while (p != pHead)
