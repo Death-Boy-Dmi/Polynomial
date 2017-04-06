@@ -11,5 +11,5 @@ TEST(CPolynom, can_use_construct)
 
 TEST(CPolynom, can_use_main_construct)
 {
-	ASSERT_NO_THROW(CPolynom pol("x y", "-3x^2y^3+3x^3y^2"));
+	ASSERT_NO_THROW(CPolynom pol("-3x^2y^3+3x^3y^2", "x y"));
 }
