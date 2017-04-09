@@ -1,7 +1,7 @@
-#include "ClassPolynom.h"
+п»ї#include "ClassPolynom.h"
 #include <cmath>
 
-// перевод в массив объявленных переменных
+// РїРµСЂРµРІРѕРґ РІ РјР°СЃСЃРёРІ РѕР±СЉСЏРІР»РµРЅРЅС‹С… РїРµСЂРµРјРµРЅРЅС‹С…
 void CPolynom::ToArrVar(string strVar)	
 {
 	string sV = strVar;
@@ -24,7 +24,7 @@ void CPolynom::ToArrVar(string strVar)
 	for (size_t i = 0; i < sV.size(); i++)
 		if (sV[i] == ' ')
 			numVar++;	
-	arrVar = new string[numVar]; // создание массива переменных
+	arrVar = new string[numVar]; // СЃРѕР·РґР°РЅРёРµ РјР°СЃСЃРёРІР° РїРµСЂРµРјРµРЅРЅС‹С…
 	for (size_t i = 0; i < numVar; i++)
 	{
 		arrVar[i] = "";
@@ -38,7 +38,29 @@ void CPolynom::ToArrVar(string strVar)
 	}
 }
 
-// перевод в массив строчных мономов
+void CPolynom::StreamSetVar()
+{
+	arrArg = new double[numVar];
+
+	for (size_t i = 0; i < numVar; i++)
+	{
+		cout << arrVar[i] << " = ";
+		cin >> arrArg[i];
+		cout << endl;
+	}
+}
+
+void CPolynom::SetVar(double * arr)
+{
+	arrArg = new double[numVar];
+
+	for (size_t i = 0; i < numVar; i++)
+	{
+		arrVar[i] = arr[i];
+	}
+}
+
+// РїРµСЂРµРІРѕРґ РІ РјР°СЃСЃРёРІ СЃС‚СЂРѕС‡РЅС‹С… РјРѕРЅРѕРјРѕРІ
 void CPolynom::ToArrStrMon(string strPol)
 {
 	{
@@ -156,15 +178,15 @@ CPolynom CPolynom::operator*(double const c)
 CPolynom::CPolynom(string strPol, string strVar)
 {
 	CreateHead();
-	// перевод строки с переменными в массив переменных
+	// РїРµСЂРµРІРѕРґ СЃС‚СЂРѕРєРё СЃ РїРµСЂРµРјРµРЅРЅС‹РјРё РІ РјР°СЃСЃРёРІ РїРµСЂРµРјРµРЅРЅС‹С…
 	ToArrVar(strVar);
-	// перевод строки полинома в массив строк мономов
+	// РїРµСЂРµРІРѕРґ СЃС‚СЂРѕРєРё РїРѕР»РёРЅРѕРјР° РІ РјР°СЃСЃРёРІ СЃС‚СЂРѕРє РјРѕРЅРѕРјРѕРІ
 	ToArrStrMon(strPol);
 
 	string sP = strPol;
-	
-	// добавление ^0 & ^1 к переменным 
-	for (size_t i = 0; i<numMonom; i++)
+
+	// РґРѕР±Р°РІР»РµРЅРёРµ ^0 & ^1 Рє РїРµСЂРµРјРµРЅРЅС‹Рј 
+	for (size_t i = 0; i < numMonom; i++)
 		for (size_t j = 0; j < numVar; j++)
 		{
 			if (arrStrMon[i].find(arrVar[j]) == string::npos)
@@ -199,7 +221,7 @@ CPolynom::CPolynom(string strPol, string strVar)
 			}
 		}
 
-	// заполнение коэффициентов
+	// Р·Р°РїРѕР»РЅРµРЅРёРµ РєРѕСЌС„С„РёС†РёРµРЅС‚РѕРІ
 	arrMonom = new TMonom[numMonom];
 	for (size_t i = 0; i < numMonom; i++)
 	{
@@ -215,7 +237,7 @@ CPolynom::CPolynom(string strPol, string strVar)
 				arrMonom[i].coef = atof(strTemp.c_str());
 	}
 
-	// заполнение степеней
+	// Р·Р°РїРѕР»РЅРµРЅРёРµ СЃС‚РµРїРµРЅРµР№
 	for (size_t i = 0; i < numMonom; i++)
 	{
 		string monomWithOutVar = arrStrMon[i];
@@ -226,11 +248,11 @@ CPolynom::CPolynom(string strPol, string strVar)
 			size_t lengthVarStr = arrVar[j].length();
 			monomWithOutVar = monomWithOutVar.erase(posVar, lengthVarStr);
 		}
- 		unsigned int *arrPow = new unsigned int[numVar];
+		unsigned int *arrPow = new unsigned int[numVar];
 		arrMonom[i].degree = 0;
 		for (size_t j = 0; j < numVar; j++)
 		{
-			string tmp = monomWithOutVar.erase(0,1);
+			string tmp = monomWithOutVar.erase(0, 1);
 			size_t pos;
 			if (monomWithOutVar.find("^") == string::npos)
 			{
@@ -265,7 +287,6 @@ CPolynom::CPolynom(string strPol, string strVar)
 		p = tmp;
 	}
 	p->pNext = pHead;
-	
 }
 
 CPolynom::~CPolynom()
@@ -308,13 +329,7 @@ double CPolynom::Calculate()
 {
 	unsigned int power = Power;
 	double result = 0;
-	double * arrArg = new double[numVar];
-	for (size_t i = 0; i < numVar; i++)
-	{
-		cout << arrVar[i] << " = ";
-		cin >> arrArg[i];
-		cout << endl;
-	}
+
 	TLink *p = new TLink;
 	p = pHead->pNext;
 	while (p != pHead)

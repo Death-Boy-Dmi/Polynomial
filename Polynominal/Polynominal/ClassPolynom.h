@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include <iostream>
 #include <string>
@@ -29,20 +29,25 @@ class CPolynom
 		pHead->monom.coef = 0;
 		pHead->monom.degree = -1;
 	}
-	string* arrStrMon;	// массив объявленных переменных
-	size_t numMonom;	// количество мономов
-	TMonom* arrMonom;	// массив мономов
-	string* arrVar;		// массив объявленных переменных
-	size_t numVar;		// количество переменных
+	string* arrStrMon;	// РјР°СЃСЃРёРІ РѕР±СЉСЏРІР»РµРЅРЅС‹С… РїРµСЂРµРјРµРЅРЅС‹С…
+	size_t numMonom;	// РєРѕР»РёС‡РµСЃС‚РІРѕ РјРѕРЅРѕРјРѕРІ
+	TMonom* arrMonom;	// РјР°СЃСЃРёРІ РјРѕРЅРѕРјРѕРІ
+	string* arrVar;		// РјР°СЃСЃРёРІ РѕР±СЉСЏРІР»РµРЅРЅС‹С… РїРµСЂРµРјРµРЅРЅС‹С…
+	size_t numVar;		// РєРѕР»РёС‡РµСЃС‚РІРѕ РїРµСЂРµРјРµРЅРЅС‹С…
+	double* arrArg;
+
+	void ToArrStrMon(string strPol);	// РїРµСЂРµРІРѕРґ РІ РјР°СЃСЃРёРІ СЃС‚СЂРѕС‡РЅС‹С… РјРѕРЅРѕРјРѕРІ
 public:
 	static unsigned int Power;
-	void ToArrVar(string strVar);		// перевод в массив объявленных переменных
-	void ToArrStrMon(string strPol);	// перевод в массив строчных мономов
 
 	CPolynom(string strPol, string strVar);
 	~CPolynom();
 	CPolynom();
-	
+
+	void ToArrVar(string strVar);		// РїРµСЂРµРІРѕРґ РІ РјР°СЃСЃРёРІ РѕР±СЉСЏРІР»РµРЅРЅС‹С… РїРµСЂРµРјРµРЅРЅС‹С…
+	void StreamSetVar();
+	void SetVar(double* arr);
+
 	CPolynom operator + (const CPolynom &polynom);
 	CPolynom operator * (double const c);
 	string ToString(); 
