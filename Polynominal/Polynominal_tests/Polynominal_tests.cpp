@@ -11,5 +11,26 @@ TEST(CPolynom, can_use_construct)
 
 TEST(CPolynom, can_use_main_construct)
 {
-	ASSERT_NO_THROW(CPolynom pol("x y", "-3x^2y^3+3x^3y^2"));
+	ASSERT_NO_THROW(CPolynom pol("-3x^2y^3+3x^3y^2", "x y"));
+}
+
+TEST(CPolynom, can_use_Calculate)
+{
+	CPolynom pol("-3x^2y^3+3x^3y^2", "x y");
+
+	ASSERT_NO_THROW(pol.Calculate());
+}
+
+TEST(CPolynom, can_use_ToString)
+{
+	CPolynom pol("-3x^2y^3+3x^3y^2", "x y");
+
+	ASSERT_NO_THROW(pol.ToString());
+}
+
+TEST(CPolynom, can_use_Plus)
+{
+	CPolynom pol1("-3x^2y^3+3x^3y^2", "x y");
+	CPolynom pol2("-3x^2y^3+3x^3y^2", "x y");
+	ASSERT_NO_THROW(pol1 + pol2);
 }
