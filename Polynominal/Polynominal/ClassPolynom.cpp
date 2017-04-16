@@ -56,7 +56,7 @@ void CPolynom::SetVar(double * arr)
 
 	for (size_t i = 0; i < numVar; i++)
 	{
-		arrVar[i] = arr[i];
+		arrArg[i] = arr[i];
 	}
 }
 
@@ -126,38 +126,43 @@ CPolynom::CPolynom()
 CPolynom CPolynom::operator+(const CPolynom & polynom)
 {
 	CPolynom result;
-	result.CreateHead();
 	CPolynom polF = *this;
 	CPolynom polS(polynom);
 	TLink *pF = polF.pHead;
 	TLink *pS = polS.pHead;
-	TLink *pR = new TLink;
-	TLink *tmp = new TLink;
-	pR->pNext = tmp;
-	while (pF != polF.pHead)
-		while (pS != polS.pHead)
-		{
-			if (pF->monom.degree > pS->monom.degree)
-			{
-				pR->pNext = pF;
-				pF = pF->pNext;
-			}
-			if (pF->monom.degree < pS->monom.degree)
-			{
-				pR->pNext = pS;
-				pS = pF->pNext;
-			}
-			if (pF->monom.degree == pS->monom.degree)
-			{
-				pR->pNext->monom.coef = pF->monom.coef + pS->monom.coef;
-				pR->pNext->monom.degree = pS->monom.degree;
-				pS = pF->pNext;
-				pF = pF->pNext;
-			}
-			pR = pR->pNext;
+	TLink *pR = result.pHead;
+	pF = pF->pNext;
+	pS = pS->pNext;
+	while (pF != pHead || pS != pHead)
+	{
+		if (pF->monom.degree > pS->monom.degree)
+		{ 
+			TLink *tmp = new TLink;
+			tmp = pF;
 			pR->pNext = tmp;
+			pR = pR->pNext;
+			pF = pF->pNext;
 		}
-	result.pHead->pNext = pR;
+		if (pF->monom.degree < pS->monom.degree)
+		{
+			TLink *tmp = new TLink;
+			tmp = pS;
+			pR = tmp;
+			pR = pR->pNext;
+			pS = pF->pNext;
+		}
+		if (pF->monom.degree == pS->monom.degree)
+		{
+			TLink *tmp = new TLink;
+			tmp->monom.coef = pF->monom.coef + pS->monom.coef;
+			tmp->monom.degree = pS->monom.degree;
+			pS = pF->pNext;
+			pF = pF->pNext;
+			pR->pNext = tmp;
+			pR = pR->pNext;
+		}
+	}
+	
 	pR->pNext = result.pHead;
 
 	return result;
@@ -289,13 +294,13 @@ CPolynom::CPolynom(string strPol, string strVar)
 	p->pNext = pHead;
 }
 
-CPolynom::~CPolynom()
-{
-	delete pHead;
-	delete[] arrStrMon;
-	delete arrMonom;
-	delete[] arrVar;
-}
+//CPolynom::~CPolynom()
+//{
+//	delete pHead;
+//	delete[] arrStrMon;
+//	delete arrMonom;
+//	delete[] arrVar;
+//}
 
 string CPolynom::ToString()
 {
@@ -309,14 +314,14 @@ string CPolynom::ToString()
 			strCoef = "+" + strCoef;
 		if (p->monom.coef == 0)
 		{
-			continue;
 			p = p->pNext;
+			continue;
 		}
 		result += strCoef + "*";
 		unsigned int deg = p->monom.degree;
 		for (size_t j = 0; j < numVar; j++)
 		{
-			result += arrVar[j] + "^" + to_string(deg / pow(Power, numVar - 1 - j));
+			result += arrVar[j] + "^" + to_string(deg / int(pow(Power, numVar - 1 - j)));
 			deg = deg % (int)pow(Power, numVar - 1 - j);
 		}
 		p = p->pNext;
