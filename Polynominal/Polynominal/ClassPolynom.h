@@ -29,22 +29,28 @@ class CPolynom
 		pHead->monom.coef = 0;
 		pHead->monom.degree = -1;
 	}
-	string* arrStrMon;	// массив объявленных переменных
+	string* arrStrMon;	// массив объявленных мономов
 	size_t numMonom;	// количество мономов
 	TMonom* arrMonom;	// массив мономов
-	string* arrVar;		// массив объявленных переменных
-	size_t numVar;		// количество переменных
+	double* arrArg;
 
-	void ToArrVar(string strVar);		// перевод в массив объявленных переменных
 	void ToArrStrMon(string strPol);	// перевод в массив строчных мономов
-
 public:
 	static unsigned int Power;
+	static unsigned int numVar;		// количество переменных
+	static string* arrVar;		// массив объявленных переменных
 
-	CPolynom();
 	CPolynom(string strPol, string strVar);
-	~CPolynom();
+//	~CPolynom();
+	CPolynom();
 	
+	size_t GetNumVar() { return numVar; }
+	size_t GetNumMonom() { return numMonom; }
+
+	void ToArrVar(string strVar);		// перевод в массив объявленных переменных
+	void StreamSetVar();
+	void SetVar(double* arr);
+
 	CPolynom operator + (const CPolynom &polynom);
 	CPolynom operator * (double const c);
 	string ToString(); 
