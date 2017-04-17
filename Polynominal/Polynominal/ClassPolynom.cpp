@@ -60,64 +60,6 @@ void CPolynom::SetVar(double * arr)
 	}
 }
 
-// перевод в массив строчных мономов
-void CPolynom::ToArrStrMon(string strPol)
-{
-	{
-		string val = "-+^abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.";
-		for (size_t i = 0; i < strPol.size(); i++)
-		{
-
-			if (val.find(strPol[i]) == string::npos)
-			{
-				throw "An invalid character was found";
-			}
-		}
-		string str = " " + strPol + " ";
-		string arop = "-+";
-		string var = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-		if (strPol[0] == '^')
-			throw "First character is operations";
-		if (strPol[strPol.length() - 1] == '-' || strPol[strPol.length() - 1] == '+' || strPol[strPol.length() - 1] == '^')
-			throw "Last character is operations";
-	}
-
-	string sP = strPol;
-
-	numMonom = 0;
-	if (sP[0] != '+' && sP[0] != '-')
-	{
-		sP = "+" + sP;
-	}
-	for (size_t i = 0; i < sP.size(); i++)
-	{
-		if (sP[i] == '+' || sP[i] == '-')
-		{
-			numMonom++;
-		}
-	}
-	
-	arrStrMon = new string[numMonom];
-	sP += " ";
-	for (unsigned int i = 0; i < numMonom; i++)
-	{
-		size_t pos;
-		for (size_t j = 1; j < sP.size(); j++)
-		{
-			if (sP[j] == '+' || sP[j] == '-' || sP[j] == ' ')
-			{
-				pos = j;
-				break;
-			}
-		}
-		string strTemp = sP;
-		strTemp = strTemp.erase(pos, strTemp.size() - pos - 1);
-		arrStrMon[i] = strTemp;
-		sP = sP.erase(0, pos);
-	}			
-	
-}
-
 CPolynom::CPolynom()
 {
 	CreateHead();
@@ -182,13 +124,68 @@ CPolynom CPolynom::operator*(double const c)
 
 CPolynom::CPolynom(string strPol, string strVar)
 {
+	string* arrStrMon;	// массив объявленных мономов
+	size_t numMonom;	// количество мономов
+	TMonom* arrMonom;	// массив мономов
+
 	CreateHead();
+	
 	// перевод строки с переменными в массив переменных
 	ToArrVar(strVar);
+
 	// перевод строки полинома в массив строк мономов
-	ToArrStrMon(strPol);
+	{
+		string val = "-+^abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.";
+		for (size_t i = 0; i < strPol.size(); i++)
+		{
+
+			if (val.find(strPol[i]) == string::npos)
+			{
+				throw "An invalid character was found";
+			}
+		}
+		string str = " " + strPol + " ";
+		string arop = "-+";
+		string var = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		if (strPol[0] == '^')
+			throw "First character is operations";
+		if (strPol[strPol.length() - 1] == '-' || strPol[strPol.length() - 1] == '+' || strPol[strPol.length() - 1] == '^')
+			throw "Last character is operations";
+	}
 
 	string sP = strPol;
+
+	numMonom = 0;
+	if (sP[0] != '+' && sP[0] != '-')
+	{
+		sP = "+" + sP;
+	}
+	for (size_t i = 0; i < sP.size(); i++)
+	{
+		if (sP[i] == '+' || sP[i] == '-')
+		{
+			numMonom++;
+		}
+	}
+
+	arrStrMon = new string[numMonom];
+	sP += " ";
+	for (unsigned int i = 0; i < numMonom; i++)
+	{
+		size_t pos;
+		for (size_t j = 1; j < sP.size(); j++)
+		{
+			if (sP[j] == '+' || sP[j] == '-' || sP[j] == ' ')
+			{
+				pos = j;
+				break;
+			}
+		}
+		string strTemp = sP;
+		strTemp = strTemp.erase(pos, strTemp.size() - pos - 1);
+		arrStrMon[i] = strTemp;
+		sP = sP.erase(0, pos);
+	}
 
 	// добавление ^0 & ^1 к переменным 
 	for (size_t i = 0; i < numMonom; i++)
@@ -277,7 +274,7 @@ CPolynom::CPolynom(string strPol, string strVar)
 	// bublesort
 	for (size_t i = 0; i < numMonom; i++)
 		for (size_t j = numMonom - 1; j > i; j--)
-			if (arrMonom[j - 1].degree > arrMonom[j].degree)
+			if (arrMonom[j - 1].degree < arrMonom[j].degree)
 				swap(arrMonom[j - 1].degree, arrMonom[j].degree);
 
 
@@ -289,18 +286,10 @@ CPolynom::CPolynom(string strPol, string strVar)
 		TLink *tmp = new TLink;
 		tmp->monom = arrMonom[i];
 		p->pNext = tmp;
-		p = tmp;
+		p = p->pNext;
 	}
 	p->pNext = pHead;
 }
-
-//CPolynom::~CPolynom()
-//{
-//	delete pHead;
-//	delete[] arrStrMon;
-//	delete arrMonom;
-//	delete[] arrVar;
-//}
 
 string CPolynom::ToString()
 {
