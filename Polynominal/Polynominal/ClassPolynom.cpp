@@ -75,7 +75,7 @@ CPolynom CPolynom::operator+(const CPolynom & polynom)
 	TLink *pR = result.pHead;
 	pF = pF->pNext;
 	pS = pS->pNext;
-	while (pF != pHead || pS != pHead)
+	while (pF != polF.pHead || pS != polS.pHead)
 	{
 		if (pF->monom.degree > pS->monom.degree)
 		{ 
@@ -98,7 +98,7 @@ CPolynom CPolynom::operator+(const CPolynom & polynom)
 			TLink *tmp = new TLink;
 			tmp->monom.coef = pF->monom.coef + pS->monom.coef;
 			tmp->monom.degree = pS->monom.degree;
-			pS = pF->pNext;
+			pS = pS->pNext;
 			pF = pF->pNext;
 			pR->pNext = tmp;
 			pR = pR->pNext;

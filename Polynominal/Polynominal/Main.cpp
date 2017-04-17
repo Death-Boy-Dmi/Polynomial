@@ -2,11 +2,13 @@
 
 unsigned int CPolynom::Power;
 unsigned int CPolynom::numVar;
+double* CPolynom::arrArg;
+
 string* CPolynom::arrVar;
 
 void main()
 {
-	string strPol;
+	string strPol, _strPol;
 	string strVar;
 	double res;
 
@@ -29,14 +31,18 @@ void main()
 	
 	cout << "\tresult = " << res << endl;
 	
-	cout << "\n\n\t" << polinom.ToString() << endl;
+	cout << "\n\n\t" << polinom.ToString() << "\n" << endl;
 	
-	//CPolynom::Power = 10;
-	//CPolynom pol1("-3x^2y^3+3x^3y^2", "x y");
-	//CPolynom pol2("-3x^2y^3+3x^3y^2", "x y");
-	//CPolynom pol = pol1 + pol2;
+	cout << "Enter the second polynom to add it to the first:\n\n\t";
+	cin >> _strPol;
+	cout << "\n";
 
-	//cout << "\n\n\t" << pol.ToString()<< endl;
+	CPolynom _polinom(_strPol, strVar);
+
+	CPolynom pol = polinom + _polinom;
+	res = pol.Calculate();
+	cout << "\tresult = " << res << endl;
+	cout << "\n\n\t" << pol.ToString() << endl;
 
 	system("PAUSE");
 }
