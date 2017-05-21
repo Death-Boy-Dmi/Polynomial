@@ -29,15 +29,13 @@ class CPolynom
 		pHead->monom.coef = 0;
 		pHead->monom.degree = -1;
 	}
-	
-
+	string strVar;
+	unsigned int numVar;		// количество переменных
+	string* arrVar;		// массив объявленных переменных
 public:
 	static double* arrArg;
 	static unsigned int Power;
-	static unsigned int numVar;		// количество переменных
-	static string* arrVar;		// массив объявленных переменных
-
-	CPolynom(string strPol, string strVar);
+	CPolynom(string strPol);
 	CPolynom();
 	
 	double* GetArrArg() { return arrArg; }

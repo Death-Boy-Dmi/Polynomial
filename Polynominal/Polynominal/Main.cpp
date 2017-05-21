@@ -1,20 +1,14 @@
 ﻿#include "ClassPolynom.h"
 
 unsigned int CPolynom::Power;
-unsigned int CPolynom::numVar;
 double* CPolynom::arrArg;
 
-string* CPolynom::arrVar;
 
 void main()
 {
 	string strPol, _strPol;
 	string strVar;
 	double res;
-
-	cout << "Enter the names of variabels as a priority (through a space):\n\n\t";
-	getline (cin,strVar);
-	cout << "\n";
 	
 	cout << "Enter the max power:\n\n\t";
 	cin >> CPolynom::Power;
@@ -24,7 +18,7 @@ void main()
 	cin >> strPol;
 	cout << "\n";
 	
-	CPolynom polinom(strPol, strVar);
+	CPolynom polinom(strPol);
 	
 	polinom.StreamSetVar();
 	res = polinom.Calculate();
@@ -37,7 +31,7 @@ void main()
 	cin >> _strPol;
 	cout << "\n";
 
-	CPolynom _polinom(_strPol, strVar);
+	CPolynom _polinom(_strPol);
 
 	CPolynom pol = polinom + _polinom;
 	res = pol.Calculate();

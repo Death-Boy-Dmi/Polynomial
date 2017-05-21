@@ -63,6 +63,7 @@ void CPolynom::SetVar(double * arr)
 CPolynom::CPolynom()
 {
 	CreateHead();
+	strVar = "x y z";
 }
 
 CPolynom CPolynom::operator+(const CPolynom & polynom)
@@ -122,14 +123,15 @@ CPolynom CPolynom::operator*(double const c)
 	return *this;
 }
 
-CPolynom::CPolynom(string strPol, string strVar)
+CPolynom::CPolynom(string strPol)
 {
 	string* arrStrMon;	// массив объявленных мономов
 	size_t numMonom;	// количество мономов
 	TMonom* arrMonom;	// массив мономов
 
 	CreateHead();
-	
+	strVar = "x y z";
+	numVar = 3;
 	// перевод строки с переменными в массив переменных
 	ToArrVar(strVar);
 
