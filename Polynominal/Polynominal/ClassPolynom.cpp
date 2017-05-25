@@ -75,7 +75,7 @@ CPolynom CPolynom::operator+(const CPolynom & polynom)
 	TLink *pR = result.pHead;
 	pF = pF->pNext;
 	pS = pS->pNext;
-	while (pF != polF.pHead || pS != polS.pHead)
+	while (!(pF == polF.pHead && pS == polS.pHead))
 	{
 		if (pF->monom.degree > pS->monom.degree)
 		{ 
@@ -84,14 +84,16 @@ CPolynom CPolynom::operator+(const CPolynom & polynom)
 			pR->pNext = tmp;
 			pR = pR->pNext;
 			pF = pF->pNext;
+			continue;
 		}
 		if (pF->monom.degree < pS->monom.degree)
 		{
 			TLink *tmp = new TLink;
 			tmp = pS;
-			pR = tmp;
+			pR->pNext = tmp;
 			pR = pR->pNext;
-			pS = pF->pNext;
+			pS = pS->pNext;
+			continue;
 		}
 		if (pF->monom.degree == pS->monom.degree)
 		{
@@ -102,6 +104,7 @@ CPolynom CPolynom::operator+(const CPolynom & polynom)
 			pF = pF->pNext;
 			pR->pNext = tmp;
 			pR = pR->pNext;
+			continue;
 		}
 	}
 	
@@ -110,6 +113,16 @@ CPolynom CPolynom::operator+(const CPolynom & polynom)
 	return result;
 }
 
+//CPolynom CPolynom::operator+(const CPolynom & polynom)
+//{
+//	CPolynom result;
+//	CPolynom polF = *this;
+//	CPolynom polS = polynom;
+//	TLink *pF = polF.pHead->pNext;
+//	TLink *pS = polS.pHead->pNext;
+//	TLink *pR = result.pHead;
+//	while (pF != pHead &&)
+//}
 CPolynom CPolynom::operator*(double const c)
 {
 	TLink *pR = new TLink;
@@ -275,7 +288,9 @@ CPolynom::CPolynom(string strPol, string strVar)
 	for (size_t i = 0; i < numMonom; i++)
 		for (size_t j = numMonom - 1; j > i; j--)
 			if (arrMonom[j - 1].degree < arrMonom[j].degree)
-				swap(arrMonom[j - 1].degree, arrMonom[j].degree);
+			{
+				swap(arrMonom[j - 1], arrMonom[j]);
+			}
 
 
 	TLink *p = new TLink;
